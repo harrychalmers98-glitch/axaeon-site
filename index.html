@@ -119,7 +119,7 @@
     <div class="chapter-heading">
       <h2>Recent Transmissions</h2>
     </div>
-    <div class="stream-scroll">
+    <div class="stream-scroll" id="recentGrid">
       <a class="relic" href="https://youtube.com/live/a4HsUrpnPMI" target="_blank" rel="noopener">
         <h4>Debut</h4>
         <span>Model reveal, lore, and a story reading — the beginning of it all</span>
@@ -142,5 +142,34 @@
 </footer>
 
 <script src="assets/js/sky.js"></script>
+<script>
+  // Auto-fill Recent Transmissions from assets/data/recent.json
+  // (kept up to date daily by a GitHub Action reading the YouTube RSS feed).
+  fetch('assets/data/recent.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(vids => {
+      const grid = document.getElementById('recentGrid');
+      if (!grid || !Array.isArray(vids) || !vids.length) return;
+      grid.innerHTML = '';
+      vids.slice(0, 3).forEach(v => {
+        const a = document.createElement('a');
+        a.className = 'relic';
+        a.href = v.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = v.thumb;
+        img.alt = '';
+        img.loading = 'lazy';
+        const h = document.createElement('h4');
+        h.textContent = v.title;
+        a.appendChild(img);
+        a.appendChild(h);
+        grid.appendChild(a);
+      });
+    })
+    .catch(() => {}); // on any failure, the hand-written cards above remain
+</script>
 </body>
 </html>
