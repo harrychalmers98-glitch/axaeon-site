@@ -24,7 +24,7 @@ body {
 .constellation-nav {
   position: fixed;
   left: 0; top: 0; bottom: 0;
-  width: 234px;
+  width: 258px;
   z-index: 20;
   display: flex;
   flex-direction: column;
@@ -80,13 +80,12 @@ body {
   overflow: hidden;
   transition: max-height .45s ease;
 }
-.nav-group:hover .nav-sub, .nav-group.open .nav-sub { max-height: 130px; }
+.nav-group:hover .nav-sub, .nav-group.open .nav-sub { max-height: 200px; }
 .nav-sub a {
   padding: 8px 0 8px 22px;
   font-size: 0.66rem;
   letter-spacing: 0.05em;
   gap: 12px;
-  white-space: nowrap;
 }
 .nav-sub a .star-node {
   width: 5px; height: 5px;
@@ -134,7 +133,7 @@ body {
   box-shadow: 0 0 14px rgba(201,169,89,0.4);
 }
 
-main { position: relative; z-index: 5; margin-left: 234px; }
+main { position: relative; z-index: 5; margin-left: 258px; }
 
 /* ---------- Hero: the Orb (home) ---------- */
 .hero {
@@ -721,7 +720,7 @@ section.wide { max-width: 1040px; }
 footer {
   position: relative;
   z-index: 5;
-  margin-left: 234px;
+  margin-left: 258px;
   text-align: center;
   padding: 40px 5vw 34px;
   font-size: 0.8rem;
@@ -778,6 +777,6 @@ footer a:hover { opacity: 1; color: var(--gold); }
   }
   .constellation-nav.open { transform: translateX(0); }
   /* No hover on touch screens: keep sub-links always visible */
-  .nav-group .nav-sub { max-height: 130px; }
+  .nav-group .nav-sub { max-height: 200px; }
   main, footer { margin-left: 0; }
 }
