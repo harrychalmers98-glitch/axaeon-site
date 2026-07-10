@@ -113,6 +113,24 @@ function draw() {
 }
 draw();
 
+// ---------- Mobile nav toggle ----------
+const navToggle = document.getElementById('navToggle');
+const constellationNav = document.querySelector('.constellation-nav');
+if (navToggle && constellationNav) {
+  navToggle.addEventListener('click', () => {
+    constellationNav.classList.toggle('open');
+    navToggle.classList.toggle('open');
+  });
+  // Close when tapping outside the menu
+  document.addEventListener('click', e => {
+    if (constellationNav.classList.contains('open') &&
+        !constellationNav.contains(e.target) && !navToggle.contains(e.target)) {
+      constellationNav.classList.remove('open');
+      navToggle.classList.remove('open');
+    }
+  });
+}
+
 // ---------- Lightbox (art pages) ----------
 const lb = document.getElementById('lightbox');
 if (lb) {
