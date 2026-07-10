@@ -1,0 +1,49 @@
+name: Update recent streams
+
+on:
+  schedule:
+    - cron: '17 6 * * *'   # daily, 06:17 UTC
+  workflow_dispatch:        # allows manual runs from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest videos from YouTube RSS
+        run: |
+          python3 - <<'EOF'
+          import urllib.request, xml.etree.ElementTree as ET, json, os
+          url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCPyMIT3Tbl3HvPhPgFmHRQg'
+          ns = {'a': 'http://www.w3.org/2005/Atom', 'yt': 'http://www.youtube.com/xml/schemas/2015'}
+          root = ET.fromstring(urllib.request.urlopen(url, timeout=30).read())
+          vids = []
+          for e in root.findall('a:entry', ns)[:3]:
+              vid = e.find('yt:videoId', ns).text
+              title = e.find('a:title', ns).text
+              vids.append({
+                  'id': vid,
+                  'title': title,
+                  'url': f'https://www.youtube.com/watch?v={vid}',
+                  'thumb': f'https://i.ytimg.com/vi/{vid}/hqdefault.jpg',
+              })
+          assert vids, 'feed returned no entries'
+          os.makedirs('assets/data', exist_ok=True)
+          json.dump(vids, open('assets/data/recent.json', 'w'), indent=1)
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/data/recent.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update recent streams"
+            git push
+          fi
