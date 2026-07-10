@@ -131,6 +131,38 @@ if (navToggle && constellationNav) {
   });
 }
 
+// ---------- Recent Transmissions (home page) ----------
+// Fills the three homepage cards from assets/data/recent.json, which a GitHub
+// Action refreshes daily from the YouTube RSS feed. On any failure, the
+// hand-written fallback cards in the HTML remain untouched.
+if (document.getElementById('recentGrid')) {
+  fetch('assets/data/recent.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(vids => {
+      const grid = document.getElementById('recentGrid');
+      if (!grid || !Array.isArray(vids) || !vids.length) return;
+      grid.innerHTML = '';
+      vids.slice(0, 3).forEach(v => {
+        const a = document.createElement('a');
+        a.className = 'relic';
+        a.href = v.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.src = v.thumb;
+        img.alt = '';
+        img.loading = 'lazy';
+        const h = document.createElement('h4');
+        h.textContent = v.title;
+        a.appendChild(img);
+        a.appendChild(h);
+        grid.appendChild(a);
+      });
+    })
+    .catch(() => {});
+}
+
 // ---------- Lightbox (art pages) ----------
 const lb = document.getElementById('lightbox');
 if (lb) {
