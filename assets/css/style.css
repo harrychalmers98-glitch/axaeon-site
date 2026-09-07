@@ -550,8 +550,10 @@ section.wide { max-width: 1040px; }
 .artwork figcaption a { color: var(--gold-bright); text-decoration: none; border-bottom: 1px solid rgba(201,169,89,0.4); }
 .artwork figcaption a:hover { border-color: var(--gold-bright); }
 
-/* Gallery paging ("Show more") */
-.artwork.is-hidden { display: none; }
+/* Paging ("Show more") — art galleries and key streams */
+.artwork.is-hidden, .stream-note.is-hidden, .year-heading.is-hidden { display: none; }
+.year-heading { margin-top: 44px; }
+.year-heading:first-child { margin-top: 0; }
 .gallery-more { display: flex; justify-content: center; margin: 10px 0 30px; }
 .gallery-more .btn { background: transparent; cursor: pointer; }
 
